@@ -1,4 +1,7 @@
-const redux = require("redux");
+const redux = require("redux")
+const reduxLogger=require('redux-logger')
+const thunkMiddleware=require('redux-thunk').default
+
 
 const BUY_CAKE = 'BUY_CAKE'
 const BUY_ICECREAM = 'BUY_ICECREAM'
@@ -22,7 +25,9 @@ const blubberyCakeReducer = (state = initialStore, action) => {
 }
 
 const combinedReducer = redux.combineReducers({store:blubberyCakeReducer})
-const store = redux.legacy_createStore(combinedReducer)
+const applyMiddleware=redux.applyMiddleware
+const logger=reduxLogger.createLogger()
+const store = redux.legacy_createStore(combinedReducer,applyMiddleware(logger,thunkMiddleware))
 
 const actionCreator = (type) => {
     if (type === 'cake') {
@@ -36,7 +41,7 @@ const actionCreator = (type) => {
     }
 }
 const unsubscribe = store.subscribe(() => {
-    console.log('remaining count:', store.getState())
+
 })
 console.log('initial count', store.getState())
 store.dispatch(actionCreator('cake'))
